@@ -29,6 +29,26 @@ func TCPConnect6(channel string, sender string, arg string) {
     }
 }
 
+func CTCPConnect6(channel string, sender string, arg string) {
+    lg, err := net.Dial("tcp", bot.GetLGServer())
+    if err != nil {
+        bot.Notice(sender, "Error: Please try again later")
+        return
+    }
+    fmt.Fprintf(lg, "tcpconnect %s\n", arg)
+
+    reader := bufio.NewReader(lg)
+    for {
+        line, err := reader.ReadString('\n')
+        if err == io.EOF {
+            lg.Close()
+            break
+        }
+
+        bot.Notice(channel, line)
+    }
+}
+
 func init() {
     bot.RegisterPrivate(&bot.ModInfo {
         Name:        "TCPConnect6",
@@ -47,6 +67,6 @@ func init() {
         Help:        true,
 
         Command:     "tcpconnect6",
-        Callback:    TCPConnect6,
+        Callback:    CTCPConnect6,
     })
 }
