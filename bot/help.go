@@ -2,6 +2,7 @@ package bot
 
 import (
     "strings"
+    "sort"
 )
 
 func showHelp(sender string) {
@@ -18,6 +19,10 @@ func showHelp(sender string) {
             private_commands = append(private_commands, info.Command)
         }
     }
+    
+    // Alphabetical order
+    sort.Strings(channel_commands)
+    sort.Strings(private_commands)
 
     Notice(sender, "Type: 'help <command>' to get details about a specific command")
     Noticef(sender, "Channel commands: %v", strings.Join(channel_commands, ", "))
